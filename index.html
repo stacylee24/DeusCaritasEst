@@ -72,38 +72,6 @@
     opacity: 0.9;
   }
 
-  .mark-toggle {
-    display: flex;
-    justify-content: center;
-    gap: 0.4rem;
-    margin-top: 1.1rem;
-  }
-
-  .mark-toggle-btn {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.03em;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--ink-soft);
-    border-radius: 14px;
-    padding: 0.35rem 0.75rem;
-    cursor: pointer;
-    transition: all 0.18s ease;
-  }
-  .mark-toggle-btn:hover {
-    border-color: var(--gold);
-    color: var(--ink);
-  }
-  .mark-toggle-btn.active {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--parchment);
-  }
-  .mark-toggle-btn:focus-visible {
-    outline: 2px solid var(--rubric-soft);
-    outline-offset: 2px;
-  }
 
   .site-title {
     font-family: 'Cormorant Garamond', serif;
@@ -625,52 +593,11 @@
       <path d="M18.5 11.5C18.5 11.5 20 13.5 24 13.5C28 13.5 29.5 11.5 29.5 11.5" stroke="#B08B3F" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
       <path d="M24 21.5C26 21.5 27.5 23 27.5 25C27.5 26.6 26.5 28 25 28.7L26 31.5H22L23 28.7C21.5 28 20.5 26.6 20.5 25C20.5 23 22 21.5 24 21.5Z" stroke="#7A2E2E" stroke-width="0.8" opacity="0.55"/>
     </svg>
-    <svg class="mark mark-hearts" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none;">
-      <g transform="translate(11,15)">
-        <path d="M0 4.5C0 1.8 2.1 0 4.5 0C6 0 7.3 0.8 8 2C8.7 0.8 10 0 11.5 0C13.9 0 16 1.8 16 4.5C16 8.5 11 12 8.3 15.2C8 15.6 7.6 15.9 8 16.4C8.6 17.2 9 18.2 9 19.3" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M8 2C7.3 0.8 6 0 4.5 0C2.1 0 0 1.8 0 4.5C0 8.5 5 12 7.7 15.2C7.85 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M5.5 -3L6.2 1.2M3.2 -1.3L9.8 3.3M9.8 -1.3L3.2 3.3" stroke="#B08B3F" stroke-width="0.85" stroke-linecap="round"/>
-      </g>
-      <g transform="translate(24,15)">
-        <path d="M0 4.5C0 1.8 2.1 0 4.5 0C6 0 7.3 0.8 8 2C8.7 0.8 10 0 11.5 0C13.9 0 16 1.8 16 4.5C16 8.5 11 12 8.3 15.2C8.15 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M8 2C7.3 0.8 6 0 4.5 0C2.1 0 0 1.8 0 4.5C0 8.5 5 12 7.7 15.2C7.85 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        <path d="M8 -3.4L8 9.5" stroke="#7A2E2E" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
-        <path d="M5 -1.6L11 -1.6" stroke="#7A2E2E" stroke-width="0.9" stroke-linecap="round" opacity="0.85"/>
-      </g>
-    </svg>
   </div>
-  <h1 class="site-title">Caritas</h1>
-  <p class="site-subtitle">a daily rule of prayer life</p>
+  <h1 class="site-title">CARITAS</h1>
+  <p class="site-subtitle">a guide to your daily plan of life</p>
   <div class="liturgical-line"></div>
-  <div class="mark-toggle" role="group" aria-label="Choose a logo style">
-    <button type="button" class="mark-toggle-btn active" data-mark="crucifix">Crucifix</button>
-    <button type="button" class="mark-toggle-btn" data-mark="hearts">Sacred &amp; Immaculate Hearts</button>
-  </div>
 </header>
-
-<script>
-  (function () {
-    var buttons = document.querySelectorAll(".mark-toggle-btn");
-    var crucifix = document.querySelector(".mark-crucifix");
-    var hearts = document.querySelector(".mark-hearts");
-    buttons.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        buttons.forEach(function (b) { b.classList.remove("active"); });
-        btn.classList.add("active");
-        var choice = btn.getAttribute("data-mark");
-        crucifix.style.display = choice === "crucifix" ? "block" : "none";
-        hearts.style.display = choice === "hearts" ? "block" : "none";
-        try { localStorage.setItem("caritas_logo_choice", choice); } catch (e) {}
-      });
-    });
-    try {
-      var saved = localStorage.getItem("caritas_logo_choice");
-      if (saved === "hearts") {
-        document.querySelector('[data-mark="hearts"]').click();
-      }
-    } catch (e) {}
-  })();
-</script>
 
 <script>
 /* Liturgical Calendar module — computes Easter and maps dates to feasts/colors.
@@ -988,7 +915,7 @@
   </div>
 
   <footer class="footer-note">
-    “Whatsoever you do, do it for the glory of God.” — 1 Corinthians 10:31
+    “So, whether you eat or drink, or whatever you do, do all to the glory of God.” — 1 Corinthians 10:31
   </footer>
 </main>
 
@@ -1023,6 +950,8 @@
   ];
 
   var STORAGE_KEY = "caritas_state_v1";
+
+  var currentView = "daily";
 
   /* ---------- State ---------- */
 
