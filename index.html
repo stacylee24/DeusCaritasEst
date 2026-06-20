@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caritas — Daily Devotions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #FAF6EE;
+    --parchment-deep: #F2ECDC;
+    --ink: #2B2418;
+    --ink-soft: #5C5340;
+    --rubric: #7A2E2E;
+    --rubric-soft: #A65A52;
+    --sacristy: #4A5D45;
+    --gold: #B08B3F;
+    --border: #DDD2B4;
+    --border-soft: #E8DFC9;
+    --shadow-color: rgba(43, 36, 24, 0.08);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--parchment);
+    background-image:
+      radial-gradient(ellipse 1200px 800px at 50% -10%, rgba(176, 139, 63, 0.06), transparent),
+      repeating-linear-gradient(0deg, rgba(43,36,24,0.012) 0px, rgba(43,36,24,0.012) 1px, transparent 1px, transparent 3px);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+  }
+  .skip-link:focus {
+    left: 1rem;
+    top: 1rem;
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 0.5rem 1rem;
+    z-index: 200;
+    border-radius: 4px;
+  }
+
+  /* ===== Header ===== */
+  header.site-header {
+    padding: 2.75rem 1.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .mark-wrap {
+    height: 40px;
+    margin: 0 auto 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mark {
+    width: 40px;
+    height: 40px;
+    opacity: 0.9;
+  }
+
+  .mark-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 1.1rem;
+  }
+
+  .mark-toggle-btn {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    border-radius: 14px;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .mark-toggle-btn:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+  .mark-toggle-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--parchment);
+  }
+  .mark-toggle-btn:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 2px;
+  }
+
+  .site-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 2.75rem);
+    letter-spacing: 0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .site-subtitle {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+    margin-top: 0.35rem;
+  }
+
+  .liturgical-line {
+    width: 64px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.1rem auto 0;
+    opacity: 0.6;
+  }
+
+  /* ===== Week strip ===== */
+  .week-strip-wrap {
+    max-width: 640px;
+    margin: 1.75rem auto 0;
+    padding: 0 1.25rem;
+  }
+
+  .week-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.6rem;
+    padding: 0 0.15rem;
+  }
+
+  .week-range {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .week-nav {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .week-nav button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-soft);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.18s ease;
+  }
+  .week-nav button:hover {
+    border-color: var(--rubric-soft);
+    color: var(--rubric);
+  }
+  .week-nav button:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 2px;
+  }
+
+  .week-strip {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    background: var(--parchment-deep);
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    padding: 8px;
+  }
+
+  .day-cell {
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+    padding: 0.65rem 0.25rem 0.55rem;
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    position: relative;
+    transition: background 0.18s ease;
+  }
+  .day-cell:hover { background: rgba(122, 46, 46, 0.06); }
+  .day-cell:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 1px;
+  }
+
+  .day-cell .dow {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
+  }
+
+  .day-cell .dom {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .day-cell .liturgical-dot {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin: 4px auto 0;
+  }
+
+  .day-cell .progress-bar-track {
+    width: 26px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0.4rem auto 0;
+    overflow: hidden;
+  }
+  .progress-bar-track .progress-bar-fill {
+    height: 100%;
+    background: var(--sacristy);
+    border-radius: 2px;
+  }
+
+  .day-cell.is-today {
+    background: rgba(122, 46, 46, 0.07);
+  }
+  .day-cell.is-today .dom { color: var(--rubric); }
+  .day-cell.is-today::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 1px;
+    background: var(--rubric-soft);
+    display: none;
+  }
+
+  .day-cell.is-selected {
+    background: var(--rubric);
+  }
+  .day-cell.is-selected .dow,
+  .day-cell.is-selected .dom { color: var(--parchment); }
+  .day-cell.is-selected .progress-bar-track { background: rgba(250,246,238,0.3); }
+  .day-cell.is-selected .progress-bar-fill { background: var(--gold); }
+
+  .day-cell.is-future { opacity: 0.45; }
+
+  /* ===== Main body ===== */
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.25rem 1.25rem 5rem;
+  }
+
+  .day-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .day-heading h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0;
+    color: var(--ink);
+  }
+
+  .day-heading .feast-note {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--rubric);
+    font-family: 'Source Serif 4', serif;
+    display: block;
+    margin-top: 0.3rem;
+  }
+
+  .day-summary {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  /* ===== Devotion list (manuscript style) ===== */
+  .devotion-list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .devotion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 0.15rem;
+    border-bottom: 1px solid var(--border-soft);
+    position: relative;
+  }
+
+  .devotion-check {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s ease;
+    padding: 0;
+  }
+  .devotion-check:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 2px;
+  }
+  .devotion-check svg {
+    width: 13px;
+    height: 13px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .devotion-check svg path {
+    stroke: var(--parchment);
+    stroke-width: 2.4;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .devotion-item.done .devotion-check {
+    background: var(--sacristy);
+    border-color: var(--sacristy);
+  }
+  .devotion-item.done .devotion-check svg {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .devotion-info { flex: 1 1 auto; min-width: 0; }
+
+  .devotion-name {
+    font-size: 1.02rem;
+    color: var(--ink);
+    display: block;
+    line-height: 1.3;
+    transition: color 0.2s ease;
+  }
+  .devotion-item.done .devotion-name {
+    color: var(--ink-soft);
+  }
+
+  .devotion-latin {
+    font-style: italic;
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    opacity: 0.75;
+    display: block;
+    margin-top: 0.1rem;
+  }
+
+  .devotion-remove {
+    flex: 0 0 auto;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    opacity: 0;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    transition: all 0.18s ease;
+  }
+  .devotion-item:hover .devotion-remove,
+  .devotion-item:focus-within .devotion-remove { opacity: 0.55; }
+  .devotion-remove:hover { opacity: 1 !important; color: var(--rubric); background: rgba(122,46,46,0.07); }
+  .devotion-remove:focus-visible { outline: 2px solid var(--rubric-soft); opacity: 1; }
+
+  .devotion-item.custom .devotion-name::after {
+    content: '';
+  }
+
+  /* section divider between core + optional */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 2rem 0 0.4rem;
+  }
+  .section-divider .label {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .section-divider .rule {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== Add devotion control ===== */
+  .add-devotion-wrap {
+    margin-top: 0.5rem;
+  }
+
+  .add-devotion-toggle {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.18s ease;
+  }
+  .add-devotion-toggle:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+    background: rgba(176,139,63,0.05);
+  }
+  .add-devotion-toggle:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 2px;
+  }
+  .add-devotion-toggle .plus {
+    font-size: 1.1rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .devotion-picker {
+    margin-top: 0.6rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    background: var(--parchment-deep);
+    padding: 0.5rem;
+    display: none;
+  }
+  .devotion-picker.open { display: block; }
+
+  .picker-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: var(--ink);
+    transition: background 0.15s ease;
+  }
+  .picker-option:hover { background: rgba(122,46,46,0.07); }
+  .picker-option.added {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .picker-option.added:hover { background: none; }
+  .picker-option .add-icon {
+    color: var(--sacristy);
+    font-size: 0.85rem;
+  }
+
+  .picker-custom-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.6rem 0.4rem 0.3rem;
+    border-top: 1px solid var(--border-soft);
+    margin-top: 0.3rem;
+  }
+  .picker-custom-row input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.65rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.88rem;
+    background: var(--parchment);
+    color: var(--ink);
+  }
+  .picker-custom-row input:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 1px;
+  }
+  .picker-custom-row button {
+    border: 1px solid var(--sacristy);
+    background: var(--sacristy);
+    color: var(--parchment);
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .picker-custom-row button:hover { opacity: 0.85; }
+  .picker-custom-row button:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 1px;
+  }
+
+  /* ===== Examination note (textarea for daily examination) ===== */
+  .examination-box {
+    margin-top: 0.4rem;
+    padding: 0.9rem 1rem;
+    background: var(--parchment-deep);
+    border-radius: 8px;
+    border: 1px solid var(--border-soft);
+    display: none;
+  }
+  .examination-box.open { display: block; }
+  .examination-box textarea {
+    width: 100%;
+    min-height: 70px;
+    border: none;
+    background: transparent;
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    color: var(--ink);
+    resize: vertical;
+    padding: 0;
+  }
+  .examination-box textarea:focus-visible {
+    outline: none;
+  }
+  .examination-box textarea::placeholder {
+    color: var(--ink-soft);
+    opacity: 0.65;
+  }
+  .examination-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  /* ===== Footer note ===== */
+  .footer-note {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-soft);
+  }
+
+  /* ===== Reduced motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  /* ===== Mobile ===== */
+  @media (max-width: 420px) {
+    .week-strip { gap: 4px; padding: 6px; }
+    .day-cell { padding: 0.5rem 0.1rem 0.45rem; }
+    .day-cell .dom { font-size: 1.05rem; }
+    .day-cell .dow { font-size: 0.56rem; }
+    .site-title { font-size: 1.9rem; }
+    .devotion-item { gap: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to today's devotions</a>
+
+<header class="site-header">
+  <div class="mark-wrap">
+    <svg class="mark mark-crucifix" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M24 6V42M11 16H37" stroke="#7A2E2E" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M24 6V42M11 16H37" stroke="none"/>
+      <path d="M18.5 11.5C18.5 11.5 20 13.5 24 13.5C28 13.5 29.5 11.5 29.5 11.5" stroke="#B08B3F" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+      <path d="M24 21.5C26 21.5 27.5 23 27.5 25C27.5 26.6 26.5 28 25 28.7L26 31.5H22L23 28.7C21.5 28 20.5 26.6 20.5 25C20.5 23 22 21.5 24 21.5Z" stroke="#7A2E2E" stroke-width="0.8" opacity="0.55"/>
+    </svg>
+    <svg class="mark mark-hearts" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none;">
+      <g transform="translate(11,15)">
+        <path d="M0 4.5C0 1.8 2.1 0 4.5 0C6 0 7.3 0.8 8 2C8.7 0.8 10 0 11.5 0C13.9 0 16 1.8 16 4.5C16 8.5 11 12 8.3 15.2C8 15.6 7.6 15.9 8 16.4C8.6 17.2 9 18.2 9 19.3" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M8 2C7.3 0.8 6 0 4.5 0C2.1 0 0 1.8 0 4.5C0 8.5 5 12 7.7 15.2C7.85 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M5.5 -3L6.2 1.2M3.2 -1.3L9.8 3.3M9.8 -1.3L3.2 3.3" stroke="#B08B3F" stroke-width="0.85" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(24,15)">
+        <path d="M0 4.5C0 1.8 2.1 0 4.5 0C6 0 7.3 0.8 8 2C8.7 0.8 10 0 11.5 0C13.9 0 16 1.8 16 4.5C16 8.5 11 12 8.3 15.2C8.15 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M8 2C7.3 0.8 6 0 4.5 0C2.1 0 0 1.8 0 4.5C0 8.5 5 12 7.7 15.2C7.85 15.38 8 15.55 8 15.8" stroke="#7A2E2E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M8 -3.4L8 9.5" stroke="#7A2E2E" stroke-width="1" stroke-linecap="round" opacity="0.85"/>
+        <path d="M5 -1.6L11 -1.6" stroke="#7A2E2E" stroke-width="0.9" stroke-linecap="round" opacity="0.85"/>
+      </g>
+    </svg>
+  </div>
+  <h1 class="site-title">Caritas</h1>
+  <p class="site-subtitle">a daily rule of prayer life</p>
+  <div class="liturgical-line"></div>
+  <div class="mark-toggle" role="group" aria-label="Choose a logo style">
+    <button type="button" class="mark-toggle-btn active" data-mark="crucifix">Crucifix</button>
+    <button type="button" class="mark-toggle-btn" data-mark="hearts">Sacred &amp; Immaculate Hearts</button>
+  </div>
+</header>
+
+<script>
+  (function () {
+    var buttons = document.querySelectorAll(".mark-toggle-btn");
+    var crucifix = document.querySelector(".mark-crucifix");
+    var hearts = document.querySelector(".mark-hearts");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        buttons.forEach(function (b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var choice = btn.getAttribute("data-mark");
+        crucifix.style.display = choice === "crucifix" ? "block" : "none";
+        hearts.style.display = choice === "hearts" ? "block" : "none";
+        try { localStorage.setItem("caritas_logo_choice", choice); } catch (e) {}
+      });
+    });
+    try {
+      var saved = localStorage.getItem("caritas_logo_choice");
+      if (saved === "hearts") {
+        document.querySelector('[data-mark="hearts"]').click();
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<script>
+/* Liturgical Calendar module — computes Easter and maps dates to feasts/colors.
+   Scope (first pass): Solemnities + season colors, New (1969) General Roman Calendar only.
+   Old (1962) Calendar to be added once sourced with confidence. */
+
+(function (global) {
+  "use strict";
+
+  // Anonymous Gregorian algorithm (Meeus/Jones/Butcher) — standard, widely verified.
+  function computeEaster(year) {
+    var a = year % 19;
+    var b = Math.floor(year / 100);
+    var c = year % 100;
+    var d = Math.floor(b / 4);
+    var e = b % 4;
+    var f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3);
+    var h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4);
+    var k = c % 4;
+    var l = (32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var month = Math.floor((h + l - 7 * m + 114) / 31); // 3=March, 4=April
+    var day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(year, month - 1, day);
+  }
+
+  function addDays(date, n) {
+    var d = new Date(date);
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+
+  function dkey(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  // Colors: white, red, green, violet, rose
+  var COLORS = {
+    white: "#FFFFFF",
+    red: "#7A2E2E",
+    green: "#4A5D45",
+    violet: "#5C4A6E",
+    rose: "#C98A99",
+    gold: "#B08B3F"
+  };
+
+  var RANK_PRIORITY = {
+    "solemnity": 4,
+    "triduum": 4,
+    "season-start": 4,
+    "feast": 3,
+    "memorial": 2
+  };
+
+  function buildYear(year) {
+    var easter = computeEaster(year);
+    var entries = {}; // dkey -> { name, rank, color }
+
+    function set(date, name, rank, color) {
+      var k = dkey(date);
+      var existing = entries[k];
+      if (existing && (RANK_PRIORITY[existing.rank] || 0) > (RANK_PRIORITY[rank] || 0)) {
+        return; // higher-ranked celebration already occupies this date
+      }
+      entries[k] = { name: name, rank: rank, color: color };
+    }
+
+    function setFixed(monthIdx, day, name, rank, color) {
+      set(new Date(year, monthIdx, day), name, rank, color);
+    }
+
+    // ---- Fixed-date solemnities ----
+    set(new Date(year, 0, 1), "Mary, Mother of God", "solemnity", COLORS.white);
+    set(new Date(year, 0, 6), "The Epiphany of the Lord", "solemnity", COLORS.white);
+    set(new Date(year, 2, 19), "Saint Joseph, Spouse of the BVM", "solemnity", COLORS.white);
+    set(new Date(year, 2, 25), "The Annunciation of the Lord", "solemnity", COLORS.white);
+    set(new Date(year, 5, 24), "Nativity of Saint John the Baptist", "solemnity", COLORS.white);
+    set(new Date(year, 5, 29), "Saints Peter and Paul, Apostles", "solemnity", COLORS.red);
+    set(new Date(year, 7, 15), "The Assumption of the Blessed Virgin Mary", "solemnity", COLORS.white);
+    set(new Date(year, 10, 1), "All Saints", "solemnity", COLORS.white);
+    set(new Date(year, 10, 2), "Commemoration of All the Faithful Departed", "solemnity", COLORS.violet);
+    set(new Date(year, 11, 8), "The Immaculate Conception of the BVM", "solemnity", COLORS.white);
+    set(new Date(year, 11, 25), "The Nativity of the Lord (Christmas)", "solemnity", COLORS.white);
+
+    // ---- Moveable solemnities (Easter-dependent) ----
+    set(addDays(easter, -46), "Ash Wednesday", "season-start", COLORS.violet);
+    set(addDays(easter, -7), "Palm Sunday of the Passion of the Lord", "season-start", COLORS.red);
+    set(addDays(easter, -3), "Holy Thursday", "triduum", COLORS.white);
+    set(addDays(easter, -2), "Good Friday of the Passion of the Lord", "triduum", COLORS.red);
+    set(easter, "Easter Sunday of the Resurrection of the Lord", "solemnity", COLORS.white);
+    set(addDays(easter, 39), "The Ascension of the Lord", "solemnity", COLORS.white);
+    set(addDays(easter, 49), "Pentecost Sunday", "solemnity", COLORS.red);
+    set(addDays(easter, 56), "The Most Holy Trinity", "solemnity", COLORS.white);
+    set(addDays(easter, 60), "The Most Holy Body and Blood of Christ (Corpus Christi)", "solemnity", COLORS.white);
+    set(addDays(easter, 68), "The Most Sacred Heart of Jesus", "solemnity", COLORS.red);
+
+    // Christ the King — last Sunday of Ordinary Time (Sunday before First Advent Sunday)
+    // First Advent Sunday = the Sunday on/closest before Dec 25 minus (3 full weeks), i.e. 4th Sunday before Christmas
+    var christmas = new Date(year, 11, 25);
+    var christmasDow = christmas.getDay(); // 0=Sun
+    var daysBackToSunday = christmasDow; // days back to the Sunday on/before Christmas
+    var sundayOnOrBeforeChristmas = addDays(christmas, -daysBackToSunday);
+    var firstAdventSunday = addDays(sundayOnOrBeforeChristmas, -21); // 3 weeks earlier = 4th Sunday before Christmas
+    var christKing = addDays(firstAdventSunday, -7);
+    set(christKing, "Our Lord Jesus Christ, King of the Universe", "solemnity", COLORS.white);
+
+    // ---- Fixed-date feasts and obligatory memorials ----
+    setFixed(0, 2, 'Saints Basil the Great and Gregory Nazianzen', "memorial", COLORS.white);
+    setFixed(0, 17, 'Saint Anthony, Abbot', "memorial", COLORS.white);
+    setFixed(0, 21, 'Saint Agnes, Virgin and Martyr', "memorial", COLORS.red);
+    setFixed(0, 24, 'Saint Francis de Sales', "memorial", COLORS.white);
+    setFixed(0, 25, 'The Conversion of Saint Paul the Apostle', "feast", COLORS.white);
+    setFixed(0, 26, 'Saints Timothy and Titus', "memorial", COLORS.white);
+    setFixed(0, 28, 'Saint Thomas Aquinas', "memorial", COLORS.white);
+    setFixed(0, 31, 'Saint John Bosco', "memorial", COLORS.white);
+    setFixed(1, 2, 'The Presentation of the Lord', "feast", COLORS.white);
+    setFixed(1, 5, 'Saint Agatha, Virgin and Martyr', "memorial", COLORS.red);
+    setFixed(1, 6, 'Saints Paul Miki and Companions', "memorial", COLORS.red);
+    setFixed(1, 10, 'Saint Scholastica, Virgin', "memorial", COLORS.white);
+    setFixed(1, 14, 'Saints Cyril and Methodius', "memorial", COLORS.white);
+    setFixed(1, 22, 'The Chair of Saint Peter the Apostle', "feast", COLORS.white);
+    setFixed(1, 23, 'Saint Polycarp', "memorial", COLORS.white);
+    setFixed(2, 7, 'Saints Perpetua and Felicity', "memorial", COLORS.red);
+    setFixed(3, 7, 'Saint John Baptist de la Salle', "memorial", COLORS.white);
+    setFixed(3, 11, 'Saint Stanislaus', "memorial", COLORS.red);
+    setFixed(3, 25, 'Saint Mark, Evangelist', "feast", COLORS.white);
+    setFixed(3, 29, 'Saint Catherine of Siena', "memorial", COLORS.white);
+    setFixed(4, 2, 'Saint Athanasius', "memorial", COLORS.white);
+    setFixed(4, 3, 'Saints Philip and James, Apostles', "feast", COLORS.white);
+    setFixed(4, 14, 'Saint Matthias, Apostle', "feast", COLORS.white);
+    setFixed(4, 26, 'Saint Philip Neri', "memorial", COLORS.white);
+    setFixed(4, 31, 'The Visitation of the Blessed Virgin Mary', "feast", COLORS.white);
+    setFixed(5, 1, 'Saint Justin', "memorial", COLORS.white);
+    setFixed(5, 3, 'Saints Charles Lwanga and Companions', "memorial", COLORS.red);
+    setFixed(5, 5, 'Saint Boniface', "memorial", COLORS.red);
+    setFixed(5, 11, 'Saint Barnabas, Apostle', "memorial", COLORS.white);
+    setFixed(5, 13, 'Saint Anthony of Padua', "memorial", COLORS.white);
+    setFixed(5, 21, 'Saint Aloysius Gonzaga', "memorial", COLORS.white);
+    setFixed(5, 28, 'Saint Irenaeus', "memorial", COLORS.white);
+    setFixed(6, 3, 'Saint Thomas, Apostle', "feast", COLORS.white);
+    setFixed(6, 11, 'Saint Benedict', "memorial", COLORS.white);
+    setFixed(6, 15, 'Saint Bonaventure', "memorial", COLORS.white);
+    setFixed(6, 22, 'Saint Mary Magdalene', "feast", COLORS.white);
+    setFixed(6, 25, 'Saint James, Apostle', "feast", COLORS.white);
+    setFixed(6, 26, 'Saints Joachim and Anne', "memorial", COLORS.white);
+    setFixed(6, 29, 'Saints Martha, Mary and Lazarus', "memorial", COLORS.white);
+    setFixed(6, 31, 'Saint Ignatius of Loyola', "memorial", COLORS.white);
+    setFixed(7, 1, 'Saint Alphonsus Liguori', "memorial", COLORS.white);
+    setFixed(7, 4, 'Saint Jean Vianney', "memorial", COLORS.white);
+    setFixed(7, 6, 'The Transfiguration of the Lord', "feast", COLORS.white);
+    setFixed(7, 8, 'Saint Dominic', "memorial", COLORS.white);
+    setFixed(7, 10, 'Saint Lawrence', "feast", COLORS.red);
+    setFixed(7, 11, 'Saint Clare', "memorial", COLORS.white);
+    setFixed(7, 14, 'Saint Maximilian Kolbe', "memorial", COLORS.red);
+    setFixed(7, 20, 'Saint Bernard', "memorial", COLORS.white);
+    setFixed(7, 21, 'Saint Pius X', "memorial", COLORS.white);
+    setFixed(7, 22, 'The Queenship of the Blessed Virgin Mary', "memorial", COLORS.white);
+    setFixed(7, 24, 'Saint Bartholomew, Apostle', "feast", COLORS.red);
+    setFixed(7, 27, 'Saint Monica', "memorial", COLORS.white);
+    setFixed(7, 28, 'Saint Augustine of Hippo', "memorial", COLORS.white);
+    setFixed(7, 29, 'The Passion of Saint John the Baptist', "memorial", COLORS.red);
+    setFixed(8, 3, 'Saint Gregory the Great', "memorial", COLORS.white);
+    setFixed(8, 8, 'The Nativity of the Blessed Virgin Mary', "feast", COLORS.white);
+    setFixed(8, 13, 'Saint John Chrysostom', "memorial", COLORS.white);
+    setFixed(8, 14, 'The Exaltation of the Holy Cross', "feast", COLORS.red);
+    setFixed(8, 15, 'Our Lady of Sorrows', "memorial", COLORS.white);
+    setFixed(8, 16, 'Saints Cornelius and Cyprian', "memorial", COLORS.red);
+    setFixed(8, 20, 'Saints Andrew Kim Tae-gon, Paul Chong Ha-sang and Companions', "memorial", COLORS.red);
+    setFixed(8, 21, 'Saint Matthew, Apostle and Evangelist', "feast", COLORS.red);
+    setFixed(8, 23, 'Saint Pius of Pietrelcina (Padre Pio)', "memorial", COLORS.white);
+    setFixed(8, 27, 'Saint Vincent de Paul', "memorial", COLORS.white);
+    setFixed(8, 29, 'Saints Michael, Gabriel and Raphael, Archangels', "feast", COLORS.white);
+    setFixed(8, 30, 'Saint Jerome', "memorial", COLORS.white);
+    setFixed(9, 1, 'Saint Therese of the Child Jesus', "memorial", COLORS.white);
+    setFixed(9, 2, 'The Holy Guardian Angels', "memorial", COLORS.white);
+    setFixed(9, 4, 'Saint Francis of Assisi', "memorial", COLORS.white);
+    setFixed(9, 7, 'Our Lady of the Rosary', "memorial", COLORS.white);
+    setFixed(9, 15, 'Saint Teresa of Jesus (Avila)', "memorial", COLORS.white);
+    setFixed(9, 17, 'Saint Ignatius of Antioch', "memorial", COLORS.red);
+    setFixed(9, 18, 'Saint Luke, Evangelist', "feast", COLORS.white);
+    setFixed(9, 28, 'Saints Simon and Jude, Apostles', "feast", COLORS.red);
+    setFixed(10, 4, 'Saint Charles Borromeo', "memorial", COLORS.white);
+    setFixed(10, 9, 'The Dedication of the Lateran Basilica', "feast", COLORS.white);
+    setFixed(10, 10, 'Saint Leo the Great', "memorial", COLORS.white);
+    setFixed(10, 11, 'Saint Martin of Tours', "memorial", COLORS.white);
+    setFixed(10, 12, 'Saint Josaphat', "memorial", COLORS.red);
+    setFixed(10, 17, 'Saint Elizabeth of Hungary', "memorial", COLORS.white);
+    setFixed(10, 21, 'The Presentation of the Blessed Virgin Mary', "memorial", COLORS.white);
+    setFixed(10, 22, 'Saint Cecilia', "memorial", COLORS.red);
+    setFixed(10, 24, 'Saints Andrew Dung-Lac and Companions', "memorial", COLORS.red);
+    setFixed(10, 30, 'Saint Andrew, Apostle', "feast", COLORS.white);
+    setFixed(11, 3, 'Saint Francis Xavier', "memorial", COLORS.white);
+    setFixed(11, 7, 'Saint Ambrose', "memorial", COLORS.white);
+    setFixed(11, 13, 'Saint Lucy', "memorial", COLORS.red);
+    setFixed(11, 14, 'Saint John of the Cross', "memorial", COLORS.white);
+    setFixed(11, 26, 'Saint Stephen, the First Martyr', "feast", COLORS.red);
+    setFixed(11, 27, 'Saint John, Apostle and Evangelist', "feast", COLORS.white);
+    setFixed(11, 28, 'The Holy Innocents', "feast", COLORS.red);
+
+    return { easter: easter, entries: entries, firstAdventSunday: firstAdventSunday };
+  }
+
+  var yearCache = {};
+  function getYearData(year) {
+    if (!yearCache[year]) yearCache[year] = buildYear(year);
+    return yearCache[year];
+  }
+
+  // Returns { name, rank, color } or null if no solemnity/named day, plus season color fallback
+  function lookup(date) {
+    var year = date.getFullYear();
+    var data = getYearData(year);
+    var k = dkey(date);
+    if (data.entries[k]) return data.entries[k];
+
+    // also check adjacent years' data for Advent/Christmas season boundary cases
+    var prevData = getYearData(year - 1);
+    if (prevData.entries[k]) return prevData.entries[k];
+
+    return null;
+  }
+
+  // Determine season color for any date (fallback when no named feast)
+  function seasonColor(date) {
+    var year = date.getFullYear();
+    var data = getYearData(year);
+    var prevData = getYearData(year - 1);
+
+    var t = date.getTime();
+    var christmas = new Date(year, 11, 25);
+    var christmasPrev = new Date(year - 1, 11, 25);
+
+    // Gaudete Sunday: 3rd Sunday of Advent (this year's Advent cycle)
+    var gaudete = addDays(data.firstAdventSunday, 14);
+    if (dkey(date) === dkey(gaudete)) return COLORS.rose;
+    var gaudetePrev = addDays(prevData.firstAdventSunday, 14);
+    if (dkey(date) === dkey(gaudetePrev)) return COLORS.rose;
+
+    // Laetare Sunday: 4th Sunday of Lent (4 weeks before Easter)
+    var laetare = addDays(data.easter, -21);
+    if (dkey(date) === dkey(laetare)) return COLORS.rose;
+
+    // Advent: from firstAdventSunday (this year's cycle, which precedes THIS Dec) to Dec 24
+    if (t >= data.firstAdventSunday.getTime() && t < christmas.getTime()) {
+      return COLORS.violet;
+    }
+    if (t >= prevData.firstAdventSunday.getTime() && t < christmasPrev.getTime() && year === christmasPrev.getFullYear()) {
+      return COLORS.violet;
+    }
+
+    // Christmas season: Dec 25 - Jan ~ Baptism of the Lord (approx Jan 13)
+    if ((date.getMonth() === 11 && date.getDate() >= 25) || (date.getMonth() === 0 && date.getDate() <= 13)) {
+      return COLORS.white;
+    }
+
+    var easter = data.easter;
+    var ashWed = addDays(easter, -46);
+    var pentecost = addDays(easter, 49);
+
+    if (t >= ashWed.getTime() && t < easter.getTime()) {
+      return COLORS.violet; // Lent
+    }
+    if (t >= easter.getTime() && t <= pentecost.getTime()) {
+      return COLORS.white; // Easter season
+    }
+
+    return COLORS.green; // Ordinary Time
+  }
+
+  global.LiturgicalCalendar = {
+    lookup: lookup,
+    seasonColor: seasonColor,
+    computeEaster: computeEaster
+  };
+
+})(window);
+</script>
+
+<div class="week-strip-wrap">
+  <div class="week-label-row">
+    <span class="week-range" id="weekRange">—</span>
+    <div class="week-nav">
+      <button id="prevWeek" aria-label="Previous week">‹</button>
+      <button id="todayJump" aria-label="Jump to today" title="Jump to today">•</button>
+      <button id="nextWeek" aria-label="Next week">›</button>
+    </div>
+  </div>
+  <div class="week-strip" id="weekStrip" role="group" aria-label="Select a day"></div>
+</div>
+
+<main id="main-content">
+  <div class="day-heading">
+    <div>
+      <h2 id="selectedDayLabel">Today</h2>
+      <span class="feast-note" id="feastNote" style="display:none;"></span>
+    </div>
+    <span class="day-summary" id="daySummary">0 of 0</span>
+  </div>
+
+  <ul class="devotion-list" id="coreList" aria-label="Core devotions"></ul>
+
+  <div class="section-divider" id="optionalDivider" style="display:none;">
+    <span class="label">Also tracking</span>
+    <div class="rule"></div>
+  </div>
+  <ul class="devotion-list" id="optionalList" aria-label="Additional devotions"></ul>
+
+  <div class="add-devotion-wrap">
+    <button class="add-devotion-toggle" id="addToggle" aria-expanded="false">
+      <span class="plus">+</span> Add a devotion to track
+    </button>
+    <div class="devotion-picker" id="devotionPicker"></div>
+  </div>
+
+  <footer class="footer-note">
+    “Whatsoever you do, do it for the glory of God.” — 1 Corinthians 10:31
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Data ---------- */
+
+  var CORE_DEVOTIONS = [
+    { id: "mass", name: "Daily Mass", latin: "Missa" },
+    { id: "rosary", name: "Rosary", latin: "Rosarium" },
+    { id: "silent_prayer", name: "Silent Prayer", latin: "Oratio" },
+    { id: "spiritual_reading", name: "Spiritual Reading", latin: "Lectio Divina" },
+    { id: "morning_offering", name: "Morning Offering", latin: "Oblatio Matutina" },
+    { id: "examination", name: "Daily Examination", latin: "Examen" }
+  ];
+
+  var OPTIONAL_CATALOG = [
+    { id: "divine_mercy", name: "Divine Mercy Chaplet", latin: "Corona Divinae Misericordiae" },
+    { id: "confession", name: "Confession", latin: "Confessio" },
+    { id: "adoration", name: "Eucharistic Adoration", latin: "Adoratio" },
+    { id: "stations", name: "Stations of the Cross", latin: "Via Crucis" },
+    { id: "fasting", name: "Day of Fasting / Abstinence", latin: "Ieiunium" },
+    { id: "angelus", name: "The Angelus", latin: "Angelus Domini" },
+    { id: "lauds", name: "Lauds (Morning Prayer)", latin: "Laudes" },
+    { id: "vespers", name: "Vespers (Evening Prayer)", latin: "Vesperae" },
+    { id: "matins", name: "Matins (Office of Readings)", latin: "Matutinum" },
+    { id: "compline", name: "Compline (Night Prayer)", latin: "Completorium" },
+    { id: "midday", name: "Midday Prayer", latin: "Sexta" },
+    { id: "purgatory", name: "Prayer for Souls in Purgatory", latin: "Pro Defunctis" }
+  ];
+
+  var STORAGE_KEY = "caritas_state_v1";
+
+  /* ---------- State ---------- */
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return { dayDevotions: {}, log: {}, notes: {} };
+    // dayDevotions: { "YYYY-MM-DD": { devotionId: true } } — which optional devotions are tracked on that specific day
+    // log: { "YYYY-MM-DD": { devotionId: true } } — which devotions are marked done on that day
+    // notes: { "YYYY-MM-DD": "examination text" }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  var state = loadState();
+  if (!state.dayDevotions) state.dayDevotions = {};
+  if (!state.log) state.log = {};
+  if (!state.notes) state.notes = {};
+
+  /* ---------- Date helpers ---------- */
+
+  function dateKey(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function startOfDay(d) {
+    var n = new Date(d);
+    n.setHours(0, 0, 0, 0);
+    return n;
+  }
+
+  function isSameDay(a, b) {
+    return dateKey(a) === dateKey(b);
+  }
+
+  function startOfWeek(d) {
+    var n = startOfDay(d);
+    n.setDate(n.getDate() - n.getDay()); // Sunday start
+    return n;
+  }
+
+  var DOW_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var MONTH_LABELS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  var today = startOfDay(new Date());
+  var viewedWeekStart = startOfWeek(today);
+  var selectedDate = today;
+
+  /* ---------- Devotion list for a given day ---------- */
+
+  function activeOptionalDevotionsForDay(dateK) {
+    var dayMap = state.dayDevotions[dateK];
+    if (!dayMap) return [];
+    return OPTIONAL_CATALOG.filter(function (d) { return dayMap[d.id]; });
+  }
+
+  function allTrackedForDay(dateK) {
+    return CORE_DEVOTIONS.concat(activeOptionalDevotionsForDay(dateK));
+  }
+
+  function isDone(dateK, id) {
+    return !!(state.log[dateK] && state.log[dateK][id]);
+  }
+
+  function setDone(dateK, id, val) {
+    if (!state.log[dateK]) state.log[dateK] = {};
+    if (val) state.log[dateK][id] = true;
+    else delete state.log[dateK][id];
+    saveState();
+  }
+
+  function addDevotionToDay(dateK, id) {
+    if (!state.dayDevotions[dateK]) state.dayDevotions[dateK] = {};
+    state.dayDevotions[dateK][id] = true;
+    saveState();
+  }
+
+  function removeDevotionFromDay(dateK, id) {
+    if (state.dayDevotions[dateK]) {
+      delete state.dayDevotions[dateK][id];
+    }
+    if (state.log[dateK]) {
+      delete state.log[dateK][id];
+    }
+    saveState();
+  }
+
+  /* ---------- Rendering: Week strip ---------- */
+
+  var weekStripEl = document.getElementById("weekStrip");
+  var weekRangeEl = document.getElementById("weekRange");
+
+  function renderWeekStrip() {
+    weekStripEl.innerHTML = "";
+    var days = [];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(viewedWeekStart);
+      d.setDate(d.getDate() + i);
+      days.push(d);
+    }
+
+    var first = days[0], last = days[6];
+    var rangeText;
+    if (first.getMonth() === last.getMonth()) {
+      rangeText = MONTH_LABELS[first.getMonth()] + " " + first.getDate() + "–" + last.getDate() + ", " + last.getFullYear();
+    } else {
+      rangeText = MONTH_LABELS[first.getMonth()] + " " + first.getDate() + " – " + MONTH_LABELS[last.getMonth()] + " " + last.getDate() + ", " + last.getFullYear();
+    }
+    weekRangeEl.textContent = rangeText;
+
+    days.forEach(function (d) {
+      var btn = document.createElement("button");
+      btn.className = "day-cell";
+      btn.type = "button";
+      var k = dateKey(d);
+      var isToday = isSameDay(d, today);
+      var isSelected = isSameDay(d, selectedDate);
+      var isFuture = d.getTime() > today.getTime();
+
+      if (isToday) btn.classList.add("is-today");
+      if (isSelected) btn.classList.add("is-selected");
+      if (isFuture) btn.classList.add("is-future");
+
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+      btn.setAttribute("aria-label", DOW_LABELS[d.getDay()] + " " + MONTH_LABELS[d.getMonth()] + " " + d.getDate() + (isToday ? " (today)" : ""));
+
+      var dow = document.createElement("span");
+      dow.className = "dow";
+      dow.textContent = DOW_LABELS[d.getDay()];
+
+      var dom = document.createElement("span");
+      dom.className = "dom";
+      dom.textContent = d.getDate();
+
+      var liturgicalDot = document.createElement("span");
+      liturgicalDot.className = "liturgical-dot";
+      var litColor = window.LiturgicalCalendar ? window.LiturgicalCalendar.seasonColor(d) : null;
+      var litEntry = window.LiturgicalCalendar ? window.LiturgicalCalendar.lookup(d) : null;
+      if (litEntry && litEntry.color) litColor = litEntry.color;
+      if (litColor) {
+        liturgicalDot.style.background = litColor;
+        if (litColor === "#FFFFFF") {
+          liturgicalDot.style.border = "1px solid var(--border)";
+        }
+      } else {
+        liturgicalDot.style.visibility = "hidden";
+      }
+
+      var progressTrack = document.createElement("span");
+      progressTrack.className = "progress-bar-track";
+      var tracked = isFuture ? [] : allTrackedForDay(k);
+      var progressFill = document.createElement("span");
+      progressFill.className = "progress-bar-fill";
+      if (tracked.length > 0) {
+        var doneCount = tracked.filter(function (dev) { return isDone(k, dev.id); }).length;
+        var pct = Math.round((doneCount / tracked.length) * 100);
+        progressFill.style.width = pct + "%";
+      } else {
+        progressTrack.style.visibility = "hidden";
+        progressFill.style.width = "0%";
+      }
+      progressTrack.appendChild(progressFill);
+
+      btn.appendChild(dow);
+      btn.appendChild(dom);
+      btn.appendChild(liturgicalDot);
+      btn.appendChild(progressTrack);
+
+      btn.addEventListener("click", function (dateObj) {
+        return function () {
+          selectedDate = startOfDay(dateObj);
+          renderWeekStrip();
+          renderBody();
+        };
+      }(d));
+
+      weekStripEl.appendChild(btn);
+    });
+  }
+
+  /* ---------- Rendering: Body ---------- */
+
+  var selectedDayLabelEl = document.getElementById("selectedDayLabel");
+  var feastNoteEl = document.getElementById("feastNote");
+  var daySummaryEl = document.getElementById("daySummary");
+  var coreListEl = document.getElementById("coreList");
+  var optionalListEl = document.getElementById("optionalList");
+  var optionalDividerEl = document.getElementById("optionalDivider");
+
+  function renderBody() {
+    var k = dateKey(selectedDate);
+    var isToday = isSameDay(selectedDate, today);
+
+    selectedDayLabelEl.textContent = isToday
+      ? "Today, " + DOW_LABELS[selectedDate.getDay()] + " " + MONTH_LABELS[selectedDate.getMonth()] + " " + selectedDate.getDate()
+      : DOW_LABELS[selectedDate.getDay()] + ", " + MONTH_LABELS[selectedDate.getMonth()] + " " + selectedDate.getDate();
+
+    var feastEntry = window.LiturgicalCalendar ? window.LiturgicalCalendar.lookup(selectedDate) : null;
+    if (feastEntry) {
+      feastNoteEl.textContent = feastEntry.name;
+      feastNoteEl.style.display = "block";
+    } else {
+      feastNoteEl.style.display = "none";
+    }
+
+    var tracked = allTrackedForDay(k);
+    var doneCount = tracked.filter(function (d) { return isDone(k, d.id); }).length;
+    daySummaryEl.textContent = doneCount + " of " + tracked.length;
+
+    coreListEl.innerHTML = "";
+    CORE_DEVOTIONS.forEach(function (dev) {
+      coreListEl.appendChild(renderDevotionItem(dev, k, false));
+    });
+
+    var optDevs = activeOptionalDevotionsForDay(k);
+    optionalListEl.innerHTML = "";
+    if (optDevs.length > 0) {
+      optionalDividerEl.style.display = "flex";
+      optDevs.forEach(function (dev) {
+        optionalListEl.appendChild(renderDevotionItem(dev, k, true));
+      });
+    } else {
+      optionalDividerEl.style.display = "none";
+    }
+
+    renderPicker();
+  }
+
+  function renderDevotionItem(dev, dateK, removable) {
+    var li = document.createElement("li");
+    li.className = "devotion-item" + (isDone(dateK, dev.id) ? " done" : "");
+
+    var checkBtn = document.createElement("button");
+    checkBtn.className = "devotion-check";
+    checkBtn.type = "button";
+    checkBtn.setAttribute("aria-pressed", isDone(dateK, dev.id) ? "true" : "false");
+    checkBtn.setAttribute("aria-label", "Mark " + dev.name + " as " + (isDone(dateK, dev.id) ? "not done" : "done"));
+    checkBtn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 8.5L6.2 11.5L13 4"/></svg>';
+    checkBtn.addEventListener("click", function () {
+      var newVal = !isDone(dateK, dev.id);
+      setDone(dateK, dev.id, newVal);
+      renderBody();
+      renderWeekStrip();
+    });
+
+    var info = document.createElement("div");
+    info.className = "devotion-info";
+    var nameEl = document.createElement("span");
+    nameEl.className = "devotion-name";
+    nameEl.textContent = dev.name;
+    info.appendChild(nameEl);
+    if (dev.latin) {
+      var latinEl = document.createElement("span");
+      latinEl.className = "devotion-latin";
+      latinEl.textContent = dev.latin;
+      info.appendChild(latinEl);
+    }
+
+    li.appendChild(checkBtn);
+    li.appendChild(info);
+
+    if (removable) {
+      var removeBtn = document.createElement("button");
+      removeBtn.className = "devotion-remove";
+      removeBtn.type = "button";
+      removeBtn.setAttribute("aria-label", "Stop tracking " + dev.name);
+      removeBtn.textContent = "✕";
+      removeBtn.addEventListener("click", function () {
+        removeDevotionFromDay(dateK, dev.id);
+        renderBody();
+        renderWeekStrip();
+      });
+      li.appendChild(removeBtn);
+    }
+
+    return li;
+  }
+
+  /* ---------- Add devotion picker ---------- */
+
+  var addToggle = document.getElementById("addToggle");
+  var devotionPicker = document.getElementById("devotionPicker");
+  var pickerOpen = false;
+
+  addToggle.addEventListener("click", function () {
+    pickerOpen = !pickerOpen;
+    devotionPicker.classList.toggle("open", pickerOpen);
+    addToggle.setAttribute("aria-expanded", pickerOpen ? "true" : "false");
+    addToggle.innerHTML = pickerOpen
+      ? '<span class="plus">−</span> Hide devotion list'
+      : '<span class="plus">+</span> Add a devotion to track';
+  });
+
+  function renderPicker() {
+    devotionPicker.innerHTML = "";
+    var k = dateKey(selectedDate);
+    OPTIONAL_CATALOG.forEach(function (dev) {
+      var added = !!(state.dayDevotions[k] && state.dayDevotions[k][dev.id]);
+      var row = document.createElement("div");
+      row.className = "picker-option" + (added ? " added" : "");
+      row.setAttribute("role", "button");
+      row.setAttribute("tabindex", added ? "-1" : "0");
+
+      var label = document.createElement("span");
+      label.textContent = dev.name;
+      row.appendChild(label);
+
+      var icon = document.createElement("span");
+      icon.className = "add-icon";
+      icon.textContent = added ? "Added" : "+ Add";
+      row.appendChild(icon);
+
+      if (!added) {
+        row.addEventListener("click", function () {
+          addDevotionToDay(k, dev.id);
+          renderBody();
+          renderWeekStrip();
+        });
+        row.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            addDevotionToDay(k, dev.id);
+            renderBody();
+            renderWeekStrip();
+          }
+        });
+      }
+
+      devotionPicker.appendChild(row);
+    });
+
+    // Custom devotion entry
+    var customRow = document.createElement("div");
+    customRow.className = "picker-custom-row";
+    var input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Name your own devotion…";
+    input.setAttribute("aria-label", "Custom devotion name");
+    var addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.textContent = "Add";
+
+    function addCustom() {
+      var val = input.value.trim();
+      if (!val) return;
+      var id = "custom_" + val.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") + "_" + Date.now().toString(36);
+      OPTIONAL_CATALOG.push({ id: id, name: val, latin: "" });
+      addDevotionToDay(k, id);
+      input.value = "";
+      renderBody();
+      renderWeekStrip();
+    }
+
+    addBtn.addEventListener("click", addCustom);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addCustom();
+      }
+    });
+
+    customRow.appendChild(input);
+    customRow.appendChild(addBtn);
+    devotionPicker.appendChild(customRow);
+  }
+
+  /* ---------- Week navigation ---------- */
+
+  document.getElementById("prevWeek").addEventListener("click", function () {
+    viewedWeekStart.setDate(viewedWeekStart.getDate() - 7);
+    renderWeekStrip();
+  });
+  document.getElementById("nextWeek").addEventListener("click", function () {
+    viewedWeekStart.setDate(viewedWeekStart.getDate() + 7);
+    renderWeekStrip();
+  });
+  document.getElementById("todayJump").addEventListener("click", function () {
+    viewedWeekStart = startOfWeek(today);
+    selectedDate = today;
+    renderWeekStrip();
+    renderBody();
+  });
+
+  /* ---------- Init ---------- */
+
+  renderWeekStrip();
+  renderBody();
+
+})();
+</script>
+
+</body>
+</html>
