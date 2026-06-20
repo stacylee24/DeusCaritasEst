@@ -384,11 +384,77 @@
     color: var(--sacristy);
   }
 
+  .view-switcher {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: none;
+    gap: 0.4rem;
+  }
+
+  body:not(.auth-locked) .view-switcher {
+    display: flex;
+  }
+
+  .view-button {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: rgba(250, 246, 238, 0.82);
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.18s ease;
+  }
+
+  .view-button svg {
+    width: 17px;
+    height: 17px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .view-button:hover {
+    border-color: var(--rubric-soft);
+    color: var(--rubric);
+  }
+
+  .view-button.is-active {
+    background: var(--rubric);
+    border-color: var(--rubric);
+    color: var(--parchment);
+  }
+
+  .view-button:focus-visible {
+    outline: 2px solid var(--rubric-soft);
+    outline-offset: 2px;
+  }
+
+  body.view-month .week-strip-wrap,
+  body.view-summary .week-strip-wrap {
+    display: none;
+  }
+
   /* ===== Main body ===== */
   main {
     max-width: 640px;
     margin: 0 auto;
     padding: 2.25rem 1.25rem 5rem;
+  }
+
+  .app-panel {
+    display: none;
+  }
+
+  .app-panel.active {
+    display: block;
   }
 
   .day-heading {
@@ -694,6 +760,186 @@
     display: block;
   }
 
+  /* ===== Calendar and summary views ===== */
+  .panel-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .panel-heading h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.6rem;
+    margin: 0;
+  }
+
+  .panel-kicker {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-style: italic;
+  }
+
+  .month-nav {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .month-nav button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .calendar-dow,
+  .calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .calendar-dow {
+    color: var(--ink-soft);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 0.45rem;
+  }
+
+  .calendar-month {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .calendar-week {
+    width: 100%;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    background: rgba(242, 236, 220, 0.7);
+    padding: 0.35rem;
+    cursor: pointer;
+    font-family: 'Source Serif 4', serif;
+    color: var(--ink);
+  }
+
+  .calendar-week:hover,
+  .calendar-week:focus-visible {
+    border-color: var(--gold);
+    background: rgba(176, 139, 63, 0.08);
+  }
+
+  .calendar-day {
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.22rem;
+    border-radius: 6px;
+  }
+
+  .calendar-day.outside-month {
+    opacity: 0.35;
+  }
+
+  .calendar-day.is-today {
+    color: var(--rubric);
+    font-weight: 600;
+  }
+
+  .calendar-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .calendar-progress {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--border);
+    overflow: hidden;
+  }
+
+  .calendar-progress span {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+    background: var(--sacristy);
+  }
+
+  .summary-note {
+    margin: 0 0 1rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    background: var(--parchment-deep);
+    color: var(--ink);
+  }
+
+  .summary-list {
+    display: grid;
+    gap: 0.65rem;
+  }
+
+  .summary-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.55rem 0.8rem;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .summary-row-name {
+    min-width: 0;
+  }
+
+  .summary-row-title {
+    display: block;
+    font-size: 0.98rem;
+  }
+
+  .summary-row-subtitle {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 0.74rem;
+    font-style: italic;
+    margin-top: 0.05rem;
+  }
+
+  .summary-count {
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+    white-space: nowrap;
+  }
+
+  .summary-bar {
+    grid-column: 1 / -1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    overflow: hidden;
+  }
+
+  .summary-bar span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--sacristy);
+  }
+
   /* ===== Footer note ===== */
   .footer-note {
     text-align: center;
@@ -712,10 +958,15 @@
 
   /* ===== Mobile ===== */
   @media (max-width: 420px) {
+    .view-switcher {
+      position: static;
+      justify-content: center;
+      margin-bottom: 0.9rem;
+    }
     .account-bar {
       position: static;
       justify-content: center;
-      margin: -1.4rem 0 1rem;
+      margin: 0 0 1rem;
     }
     .week-strip { gap: 4px; padding: 6px; }
     .day-cell { padding: 0.5rem 0.1rem 0.45rem; }
@@ -758,6 +1009,34 @@
 </section>
 
 <header class="site-header">
+  <nav class="view-switcher" aria-label="Caritas views">
+    <button class="view-button is-active" id="dailyViewButton" type="button" aria-label="Daily view" title="Daily view" aria-pressed="true" data-view="daily">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 6h13"/>
+        <path d="M8 12h13"/>
+        <path d="M8 18h13"/>
+        <path d="M3 6h.01"/>
+        <path d="M3 12h.01"/>
+        <path d="M3 18h.01"/>
+      </svg>
+    </button>
+    <button class="view-button" id="monthViewButton" type="button" aria-label="Monthly view" title="Monthly view" aria-pressed="false" data-view="month">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 2v4"/>
+        <path d="M16 2v4"/>
+        <rect x="3" y="4" width="18" height="18" rx="2"/>
+        <path d="M3 10h18"/>
+      </svg>
+    </button>
+    <button class="view-button" id="summaryViewButton" type="button" aria-label="Weekly summary" title="Weekly summary" aria-pressed="false" data-view="summary">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 20V10"/>
+        <path d="M10 20V4"/>
+        <path d="M16 20v-7"/>
+        <path d="M22 20H2"/>
+      </svg>
+    </button>
+  </nav>
   <div class="account-bar">
     <span id="accountName"></span>
     <button class="account-button" id="signOutButton" type="button">Sign out</button>
@@ -1201,28 +1480,58 @@
 </div>
 
 <main id="main-content">
-  <div class="day-heading">
-    <div>
-      <h2 id="selectedDayLabel">Today</h2>
-      <span class="feast-note" id="feastNote" style="display:none;"></span>
+  <section class="app-panel active" id="dailyPanel" aria-label="Daily devotions">
+    <div class="day-heading">
+      <div>
+        <h2 id="selectedDayLabel">Today</h2>
+        <span class="feast-note" id="feastNote" style="display:none;"></span>
+      </div>
+      <span class="day-summary" id="daySummary">0 of 0</span>
     </div>
-    <span class="day-summary" id="daySummary">0 of 0</span>
-  </div>
 
-  <ul class="devotion-list" id="coreList" aria-label="Core devotions"></ul>
+    <ul class="devotion-list" id="coreList" aria-label="Core devotions"></ul>
 
-  <div class="section-divider" id="optionalDivider" style="display:none;">
-    <span class="label">Also tracking</span>
-    <div class="rule"></div>
-  </div>
-  <ul class="devotion-list" id="optionalList" aria-label="Additional devotions"></ul>
+    <div class="section-divider" id="optionalDivider" style="display:none;">
+      <span class="label">Also tracking</span>
+      <div class="rule"></div>
+    </div>
+    <ul class="devotion-list" id="optionalList" aria-label="Additional devotions"></ul>
 
-  <div class="add-devotion-wrap">
-    <button class="add-devotion-toggle" id="addToggle" aria-expanded="false">
-      <span class="plus">+</span> Add a devotion to track
-    </button>
-    <div class="devotion-picker" id="devotionPicker"></div>
-  </div>
+    <div class="add-devotion-wrap">
+      <button class="add-devotion-toggle" id="addToggle" aria-expanded="false">
+        <span class="plus">+</span> Add a devotion to track
+      </button>
+      <div class="devotion-picker" id="devotionPicker"></div>
+    </div>
+  </section>
+
+  <section class="app-panel" id="monthPanel" aria-label="Monthly view">
+    <div class="panel-heading">
+      <div>
+        <h2 id="monthTitle">Month</h2>
+        <span class="panel-kicker">Tap a week to open it.</span>
+      </div>
+      <div class="month-nav">
+        <button id="prevMonth" type="button" aria-label="Previous month">‹</button>
+        <button id="nextMonth" type="button" aria-label="Next month">›</button>
+      </div>
+    </div>
+    <div class="calendar-dow" aria-hidden="true">
+      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+    </div>
+    <div class="calendar-month" id="calendarMonth"></div>
+  </section>
+
+  <section class="app-panel" id="summaryPanel" aria-label="Weekly summary">
+    <div class="panel-heading">
+      <div>
+        <h2>Weekly Summary</h2>
+        <span class="panel-kicker" id="summaryRange">This week</span>
+      </div>
+    </div>
+    <p class="summary-note" id="confessionSummary"></p>
+    <div class="summary-list" id="summaryList"></div>
+  </section>
 
   <footer class="footer-note">
     “So, whether you eat or drink, or whatever you do, do all to the glory of God.” — 1 Corinthians 10:31
@@ -1315,6 +1624,21 @@
   var today = startOfDay(new Date());
   var viewedWeekStart = startOfWeek(today);
   var selectedDate = today;
+  var viewedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  function addDaysCopy(date, amount) {
+    var n = new Date(date);
+    n.setDate(n.getDate() + amount);
+    return n;
+  }
+
+  function endOfWeek(d) {
+    return addDaysCopy(startOfWeek(d), 6);
+  }
+
+  function formatShortDate(d) {
+    return MONTH_LABELS[d.getMonth()] + " " + d.getDate();
+  }
 
   /* ---------- Devotion list for a given day ---------- */
 
@@ -1337,12 +1661,16 @@
     if (val) state.log[dateK][id] = true;
     else delete state.log[dateK][id];
     saveState();
+    renderSummary();
+    renderMonth();
   }
 
   function addDevotionToDay(dateK, id) {
     if (!state.dayDevotions[dateK]) state.dayDevotions[dateK] = {};
     state.dayDevotions[dateK][id] = true;
     saveState();
+    renderSummary();
+    renderMonth();
   }
 
   function removeDevotionFromDay(dateK, id) {
@@ -1353,6 +1681,15 @@
       delete state.log[dateK][id];
     }
     saveState();
+    renderSummary();
+    renderMonth();
+  }
+
+  function dayCompletionPct(dateK) {
+    var tracked = allTrackedForDay(dateK);
+    if (!tracked.length) return 0;
+    var doneCount = tracked.filter(function (dev) { return isDone(dateK, dev.id); }).length;
+    return Math.round((doneCount / tracked.length) * 100);
   }
 
   /* ---------- Rendering: Week strip ---------- */
@@ -1546,6 +1883,200 @@
     return li;
   }
 
+  /* ---------- View switching ---------- */
+
+  var dailyPanelEl = document.getElementById("dailyPanel");
+  var monthPanelEl = document.getElementById("monthPanel");
+  var summaryPanelEl = document.getElementById("summaryPanel");
+  var viewButtons = Array.prototype.slice.call(document.querySelectorAll(".view-button"));
+
+  function setView(viewName) {
+    currentView = viewName;
+    document.body.classList.toggle("view-daily", viewName === "daily");
+    document.body.classList.toggle("view-month", viewName === "month");
+    document.body.classList.toggle("view-summary", viewName === "summary");
+
+    dailyPanelEl.classList.toggle("active", viewName === "daily");
+    monthPanelEl.classList.toggle("active", viewName === "month");
+    summaryPanelEl.classList.toggle("active", viewName === "summary");
+
+    viewButtons.forEach(function (button) {
+      var active = button.getAttribute("data-view") === viewName;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+
+    if (viewName === "month") renderMonth();
+    if (viewName === "summary") renderSummary();
+  }
+
+  viewButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      setView(button.getAttribute("data-view"));
+    });
+  });
+
+  /* ---------- Monthly view ---------- */
+
+  var monthTitleEl = document.getElementById("monthTitle");
+  var calendarMonthEl = document.getElementById("calendarMonth");
+
+  function renderMonth() {
+    if (!calendarMonthEl) return;
+    monthTitleEl.textContent = MONTH_LABELS[viewedMonth.getMonth()] + " " + viewedMonth.getFullYear();
+    calendarMonthEl.innerHTML = "";
+
+    var firstOfMonth = new Date(viewedMonth.getFullYear(), viewedMonth.getMonth(), 1);
+    var lastOfMonth = new Date(viewedMonth.getFullYear(), viewedMonth.getMonth() + 1, 0);
+    var cursor = startOfWeek(firstOfMonth);
+    var finalWeekStart = startOfWeek(lastOfMonth);
+
+    while (cursor.getTime() <= finalWeekStart.getTime()) {
+      var weekStart = startOfDay(cursor);
+      var weekButton = document.createElement("button");
+      weekButton.className = "calendar-week";
+      weekButton.type = "button";
+      weekButton.setAttribute("aria-label", "Open week of " + formatShortDate(weekStart));
+
+      for (var i = 0; i < 7; i++) {
+        var day = addDaysCopy(weekStart, i);
+        var k = dateKey(day);
+        var dayEl = document.createElement("span");
+        dayEl.className = "calendar-day";
+        if (day.getMonth() !== viewedMonth.getMonth()) dayEl.classList.add("outside-month");
+        if (isSameDay(day, today)) dayEl.classList.add("is-today");
+
+        var dateEl = document.createElement("span");
+        dateEl.className = "calendar-date";
+        dateEl.textContent = day.getDate();
+
+        var progressEl = document.createElement("span");
+        progressEl.className = "calendar-progress";
+        var progressFill = document.createElement("span");
+        progressFill.style.width = dayCompletionPct(k) + "%";
+        progressEl.appendChild(progressFill);
+
+        dayEl.appendChild(dateEl);
+        dayEl.appendChild(progressEl);
+        weekButton.appendChild(dayEl);
+      }
+
+      weekButton.addEventListener("click", function (dateObj) {
+        return function () {
+          viewedWeekStart = startOfWeek(dateObj);
+          selectedDate = startOfDay(dateObj);
+          renderWeekStrip();
+          renderBody();
+          renderSummary();
+          setView("daily");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+      }(weekStart));
+
+      calendarMonthEl.appendChild(weekButton);
+      cursor = addDaysCopy(cursor, 7);
+    }
+  }
+
+  document.getElementById("prevMonth").addEventListener("click", function () {
+    viewedMonth = new Date(viewedMonth.getFullYear(), viewedMonth.getMonth() - 1, 1);
+    renderMonth();
+  });
+
+  document.getElementById("nextMonth").addEventListener("click", function () {
+    viewedMonth = new Date(viewedMonth.getFullYear(), viewedMonth.getMonth() + 1, 1);
+    renderMonth();
+  });
+
+  /* ---------- Weekly summary ---------- */
+
+  var summaryRangeEl = document.getElementById("summaryRange");
+  var confessionSummaryEl = document.getElementById("confessionSummary");
+  var summaryListEl = document.getElementById("summaryList");
+
+  function daysSinceLastConfession() {
+    var latest = null;
+    Object.keys(state.log || {}).forEach(function (k) {
+      if (!state.log[k] || !state.log[k].confession) return;
+      var parts = k.split("-").map(Number);
+      var d = startOfDay(new Date(parts[0], parts[1] - 1, parts[2]));
+      if (d.getTime() <= today.getTime() && (!latest || d.getTime() > latest.getTime())) {
+        latest = d;
+      }
+    });
+    if (!latest) return null;
+    return Math.floor((today.getTime() - latest.getTime()) / 86400000);
+  }
+
+  function devotionsForSummary(weekStart) {
+    var map = {};
+    CORE_DEVOTIONS.forEach(function (dev) { map[dev.id] = dev; });
+    for (var i = 0; i < 7; i++) {
+      var dayKey = dateKey(addDaysCopy(weekStart, i));
+      OPTIONAL_CATALOG.forEach(function (dev) {
+        if ((state.dayDevotions[dayKey] && state.dayDevotions[dayKey][dev.id]) || (state.log[dayKey] && state.log[dayKey][dev.id])) {
+          map[dev.id] = dev;
+        }
+      });
+    }
+    return Object.keys(map).map(function (id) { return map[id]; });
+  }
+
+  function renderSummary() {
+    if (!summaryListEl) return;
+    var weekStart = startOfDay(viewedWeekStart);
+    var weekEnd = endOfWeek(weekStart);
+    summaryRangeEl.textContent = formatShortDate(weekStart) + " - " + formatShortDate(weekEnd);
+
+    var confessionDays = daysSinceLastConfession();
+    if (confessionDays === null) {
+      confessionSummaryEl.textContent = "No Confession has been logged yet.";
+    } else if (confessionDays === 0) {
+      confessionSummaryEl.textContent = "It has been 0 days since your last Confession.";
+    } else {
+      confessionSummaryEl.textContent = "It has been " + confessionDays + " days since your last Confession.";
+    }
+
+    summaryListEl.innerHTML = "";
+    devotionsForSummary(weekStart).forEach(function (dev) {
+      var count = 0;
+      for (var i = 0; i < 7; i++) {
+        if (isDone(dateKey(addDaysCopy(weekStart, i)), dev.id)) count++;
+      }
+
+      var row = document.createElement("div");
+      row.className = "summary-row";
+
+      var name = document.createElement("div");
+      name.className = "summary-row-name";
+      var title = document.createElement("span");
+      title.className = "summary-row-title";
+      title.textContent = dev.name;
+      name.appendChild(title);
+      if (dev.latin) {
+        var subtitle = document.createElement("span");
+        subtitle.className = "summary-row-subtitle";
+        subtitle.textContent = dev.latin;
+        name.appendChild(subtitle);
+      }
+
+      var countEl = document.createElement("span");
+      countEl.className = "summary-count";
+      countEl.textContent = count + "/7 days";
+
+      var bar = document.createElement("span");
+      bar.className = "summary-bar";
+      var fill = document.createElement("span");
+      fill.style.width = Math.round((count / 7) * 100) + "%";
+      bar.appendChild(fill);
+
+      row.appendChild(name);
+      row.appendChild(countEl);
+      row.appendChild(bar);
+      summaryListEl.appendChild(row);
+    });
+  }
+
   /* ---------- Add devotion picker ---------- */
 
   var addToggle = document.getElementById("addToggle");
@@ -1639,22 +2170,30 @@
   document.getElementById("prevWeek").addEventListener("click", function () {
     viewedWeekStart.setDate(viewedWeekStart.getDate() - 7);
     renderWeekStrip();
+    renderSummary();
   });
   document.getElementById("nextWeek").addEventListener("click", function () {
     viewedWeekStart.setDate(viewedWeekStart.getDate() + 7);
     renderWeekStrip();
+    renderSummary();
   });
   document.getElementById("todayJump").addEventListener("click", function () {
     viewedWeekStart = startOfWeek(today);
     selectedDate = today;
+    viewedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     renderWeekStrip();
     renderBody();
+    renderMonth();
+    renderSummary();
   });
 
   /* ---------- Init ---------- */
 
   renderWeekStrip();
   renderBody();
+  renderMonth();
+  renderSummary();
+  setView("daily");
 
 })();
 </script>
