@@ -1,0 +1,21 @@
+{
+  "name": "Caritas Daily Devotions",
+  "short_name": "Caritas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF6EE",
+  "theme_color": "#7A2E2E",
+  "icons": [
+    {
+      "src": "icons/caritas-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
